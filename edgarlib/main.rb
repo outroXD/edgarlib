@@ -2,6 +2,7 @@
 
 require 'logger'
 require_relative 'cli'
+require_relative 'secgov'
 
 module Edgarlib
   LOGGER = Logger.new('../outputs/logs/edgarlib.log')
@@ -9,7 +10,9 @@ module Edgarlib
   class Main
     def self.run
       args = Edgarlib::CliTools::Args.new
-      print "STOP"
+      if args.t
+        sec_gov = Edgarlib::SecGov::TickerCikJson.new
+      end
     end
   end
 end

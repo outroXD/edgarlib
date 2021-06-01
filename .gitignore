@@ -1,3 +1,7 @@
 outputs/*
 !outputs/.gitkeep
 !outputs/logs/.gitkeep
+
+vendor/*
+!vendor/.gitkeep
+!vendor/bundle/.gitkeep
