@@ -27,10 +27,12 @@ module Edgarlib
 
       private
       def get_ticker_cik_hash
-        response = Net::HTTP.get(URI.parse(@@url_ticker_cik_json))
-        ticker_cik_hash = JSON.load(response)
-        @ticker_cik_cache = ticker_cik_hash
-        ticker_cik_hash
+        if @ticker_cik_cache.nil?
+          response = Net::HTTP.get(URI.parse(@@url_ticker_cik_json))
+          ticker_cik_hash = JSON.load(response)
+          @ticker_cik_cache = ticker_cik_hash
+        end
+        @ticker_cik_cache
       end
     end
   end
