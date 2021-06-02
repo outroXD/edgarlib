@@ -12,7 +12,7 @@ module Edgarlib
       @ticker_cik_cache = nil
 
       def initialize
-        set_ticker_cik_hash
+        set_ticker_cik_cache
       end
 
       public
@@ -26,7 +26,7 @@ module Edgarlib
       end
 
       private
-      def set_ticker_cik_hash
+      def set_ticker_cik_cache
         if @ticker_cik_cache.nil?
           response = Net::HTTP.get(URI.parse(@@url_ticker_cik_json))
           ticker_cik_hash = JSON.load(response)
