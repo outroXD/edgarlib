@@ -11,12 +11,12 @@ module Edgarlib
       @@url_ticker_cik_json = 'https://www.sec.gov/files/company_tickers.json'.freeze
       @ticker_cik_cache = nil
 
+      def initialize
+        set_ticker_cik_hash
+      end
+
       public
       def get_company_by_ticker(ticker)
-        if @ticker_cik_cache.nil?
-          @ticker_cik_cache = self.get_ticker_cik_hash
-        end
-
         @ticker_cik_cache.each do |key, value|
           if ticker == value["ticker"]
             return Company.new(value["ticker"], value["cik_str"], value["title"])
@@ -26,7 +26,7 @@ module Edgarlib
       end
 
       private
-      def get_ticker_cik_hash
+      def set_ticker_cik_hash
         if @ticker_cik_cache.nil?
           response = Net::HTTP.get(URI.parse(@@url_ticker_cik_json))
           ticker_cik_hash = JSON.load(response)
