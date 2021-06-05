@@ -8,7 +8,7 @@ describe "secgov" do
     cik = 320193
     ticker = "AAPL"
     title = "Apple Inc."
-    company = Edgarlib::SecGov::TickerCikJson.new.get_company_by_ticker(ticker)
+    company = Edgarlib::SecGov::TickerCik.new.get_company_by_ticker(ticker)
 
     expect(cik).to eq company.cik
     expect(ticker).to eq company.ticker
