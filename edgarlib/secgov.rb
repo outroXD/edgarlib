@@ -90,7 +90,7 @@ module Edgarlib
         if @dateb.nil?
           url << "&dateb="
         else
-          utl << "$dateb=#{@dateb}"
+          url << "$dateb=#{@dateb}"
         end
 
         url << "&owner=#{@owner}"
