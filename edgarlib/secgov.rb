@@ -57,41 +57,22 @@ module Edgarlib
 
       @@base_url = 'https://www.sec.gov/cgi-bin/browse-edgar?'
 
-      def initialize(cik, action=nil, type=nil, dateb=nil, owner=nil, start=nil, count=nil, output=nil)
+      def initialize(cik,
+                     action=CompanySearchUrlStatus::ActionStatus::GET_COMPANY,
+                     type=nil,
+                     dateb=nil,
+                     owner=CompanySearchUrlStatus::OwnerStatus::INCLUDE,
+                     start=0,
+                     count=100,
+                     output=CompanySearchUrlStatus::OutputStatus::ATOM)
         @cik = cik
-
-        if action.nil?
-          @action = CompanySearchUrlStatus::ActionStatus::GET_COMPANY
-        else
-          @action = action
-        end
-
+        @action = action
         @type = type
         @dateb = dateb
-
-        if owner.nil?
-          @owner = CompanySearchUrlStatus::OwnerStatus::INCLUDE
-        else
-          @owner = owner
-        end
-
-        if start.nil?
-          @start = 0
-        else
-          @start = start
-        end
-
-        if count.nil?
-          @count = 100
-        else
-          @count = count
-        end
-
-        if output.nil?
-          @output = CompanySearchUrlStatus::OutputStatus::ATOM
-        else
-          @output = output
-        end
+        @owner = owner
+        @start = start
+        @count = count
+        @output = output
       end
 
       public
