@@ -12,13 +12,13 @@ module Edgarlib
 
     private
     def get_response(url)
-      response = Net::HTTP.get_response(URI.parse(url))
+      response = Net::HTTP.get_response(url)
 
       case response
       when Net::HTTPSuccess
         return response
       else
-        LOGGER.error(response.code)
+        Edgarlib::LOGGER.error(response.code)
       end
       nil
     end

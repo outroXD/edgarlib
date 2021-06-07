@@ -5,6 +5,7 @@ require 'uri'
 require 'json'
 require 'singleton'
 require_relative 'company'
+require_relative 'http'
 
 module Edgarlib
   module SecGov
@@ -29,16 +30,15 @@ module Edgarlib
       private
       def set_ticker_cik_cache
         if @ticker_cik_cache.nil?
-          response = Net::HTTP.get_response(URI.parse(@@url_ticker_cik_json))
-          case response
-          when Net::HTTPSuccess
-            ticker_cik_hash = JSON.load(response.body)
-            @ticker_cik_cache = ticker_cik_hash
-          else
+          response = Edgarlib::Http.instance.get_response_as_json(URI.parse(@@url_ticker_cik_json))
+
+          if response.nil?
             LOGGER.error(response.code)
           end
-          @ticker_cik_cache
+
+          @ticker_cik_cache = response
         end
+        @ticker_cik_cache
       end
     end
 
