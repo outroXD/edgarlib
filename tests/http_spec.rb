@@ -9,6 +9,5 @@ describe "http" do
     cik = 320193
     url = Edgarlib::SecGov::CompanySearchUrlBuilder.new(cik=cik).get_url
     xml = Edgarlib::Http.instance.get_response_as_xml(url=url)
-    print "STOP"
   end
 end
