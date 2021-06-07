@@ -15,7 +15,14 @@ module Edgarlib
       end
 
       def to_s
-        "-T: #{self.t} -I: #{self.i}"
+        log = ""
+        if self.t
+          log << "-T: #{self.t}"
+        end
+        if self.i
+          log << "-I: #{self.i} --install: #{self.tickers}"
+        end
+        log
       end
 
       private
