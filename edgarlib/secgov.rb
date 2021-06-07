@@ -5,6 +5,7 @@ require 'uri'
 require 'json'
 require 'singleton'
 require_relative 'company'
+require_relative 'http'
 
 module Edgarlib
   module SecGov
@@ -29,16 +30,15 @@ module Edgarlib
       private
       def set_ticker_cik_cache
         if @ticker_cik_cache.nil?
-          response = Net::HTTP.get_response(URI.parse(@@url_ticker_cik_json))
-          case response
-          when Net::HTTPSuccess
-            ticker_cik_hash = JSON.load(response.body)
-            @ticker_cik_cache = ticker_cik_hash
-          else
+          response = Edgarlib::Http.instance.get_response_as_json(@@url_ticker_cik_json)
+
+          if response.nil?
             LOGGER.error(response.code)
           end
-          @ticker_cik_cache
+
+          @ticker_cik_cache = response
         end
+        @ticker_cik_cache
       end
     end
 
@@ -57,41 +57,22 @@ module Edgarlib
 
       @@base_url = 'https://www.sec.gov/cgi-bin/browse-edgar?'
 
-      def initialize(cik, action=nil, type=nil, dateb=nil, owner=nil, start=nil, count=nil, output=nil)
+      def initialize(cik,
+                     action=CompanySearchUrlStatus::ActionStatus::GET_COMPANY,
+                     type=nil,
+                     dateb=nil,
+                     owner=CompanySearchUrlStatus::OwnerStatus::INCLUDE,
+                     start=0,
+                     count=100,
+                     output=CompanySearchUrlStatus::OutputStatus::ATOM)
         @cik = cik
-
-        if action.nil?
-          @action = CompanySearchUrlStatus::ActionStatus::GET_COMPANY
-        else
-          @action = action
-        end
-
+        @action = action
         @type = type
         @dateb = dateb
-
-        if owner.nil?
-          @owner = CompanySearchUrlStatus::OwnerStatus::INCLUDE
-        else
-          @owner = owner
-        end
-
-        if start.nil?
-          @start = 0
-        else
-          @start = start
-        end
-
-        if count.nil?
-          @count = 100
-        else
-          @count = count
-        end
-
-        if output.nil?
-          @output = CompanySearchUrlStatus::OutputStatus::ATOM
-        else
-          @output = output
-        end
+        @owner = owner
+        @start = start
+        @count = count
+        @output = output
       end
 
       public
@@ -109,7 +90,7 @@ module Edgarlib
         if @dateb.nil?
           url << "&dateb="
         else
-          utl << "$dateb=#{@dateb}"
+          url << "$dateb=#{@dateb}"
         end
 
         url << "&owner=#{@owner}"

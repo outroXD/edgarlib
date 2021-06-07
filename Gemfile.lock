@@ -5,6 +5,7 @@ GEM
     nokogiri (1.11.6-x86_64-darwin)
       racc (~> 1.4)
     racc (1.5.2)
+    rexml (3.2.5)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -24,6 +25,7 @@ PLATFORMS
 
 DEPENDENCIES
   nokogiri
+  rexml
   rspec
 
 BUNDLED WITH
