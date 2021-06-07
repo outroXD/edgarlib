@@ -12,7 +12,7 @@ module Edgarlib
 
     private
     def get_response(url)
-      response = Net::HTTP.get_response(url)
+      response = Net::HTTP.get_response(URI::parse(url))
 
       case response
       when Net::HTTPSuccess
@@ -31,7 +31,6 @@ module Edgarlib
         return nil
       end
 
-      json = nil
       begin
         json = JSON.load(response.body)
       rescue => e
@@ -47,7 +46,6 @@ module Edgarlib
         return nil
       end
 
-      xml = nil
       begin
         xml = REXML::Document.new(response.body)
       rescue => e

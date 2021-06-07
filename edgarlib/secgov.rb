@@ -30,7 +30,7 @@ module Edgarlib
       private
       def set_ticker_cik_cache
         if @ticker_cik_cache.nil?
-          response = Edgarlib::Http.instance.get_response_as_json(URI.parse(@@url_ticker_cik_json))
+          response = Edgarlib::Http.instance.get_response_as_json(@@url_ticker_cik_json)
 
           if response.nil?
             LOGGER.error(response.code)
