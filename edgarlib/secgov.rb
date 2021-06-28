@@ -18,13 +18,8 @@ module Edgarlib
       end
 
       public
-      def get_company_by_ticker(ticker)
-        @ticker_cik_cache.each do |key, value|
-          if ticker == value["ticker"]
-            return Company.new(value["ticker"], value["cik_str"], value["title"])
-          end
-        end
-        nil
+      def get_companies_by_tickers(tickers)
+        CompanyBuilder.instance.builds(tickers, @ticker_cik_cache)
       end
 
       private

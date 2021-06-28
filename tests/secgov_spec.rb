@@ -8,18 +8,18 @@ describe "secgov" do
     cik = 320193
     ticker = "AAPL"
     title = "Apple Inc."
-    company = Edgarlib::SecGov::TickerCik.new.get_company_by_ticker(ticker)
+    companies = Edgarlib::SecGov::TickerCik.new.get_companies_by_tickers([ticker])
 
-    expect(cik).to eq company.cik
-    expect(ticker).to eq company.ticker
-    expect(title).to eq company.title
+    expect(cik).to eq companies[0].cik
+    expect(ticker).to eq companies[0].ticker
+    expect(title).to eq companies[0].title
   end
 
   it '正常 tickerとして存在しない値を渡してcik/ticker/titleの取得を試みたケース' do
     ticker = "DUMMY"
-    company = Edgarlib::SecGov::TickerCik.new.get_company_by_ticker(ticker)
+    company = Edgarlib::SecGov::TickerCik.new.get_companies_by_tickers([ticker])
 
-    expect(nil).to eq company
+    expect([]).to eq company
   end
 
   it '正常 企業検索URL生成処理 cikのみを指定したパターン' do

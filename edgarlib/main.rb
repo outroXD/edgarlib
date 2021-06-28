@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'logger'
+require 'singleton'
 require_relative 'cli'
 require_relative 'secgov'
 
@@ -8,15 +9,16 @@ module Edgarlib
   LOGGER = Logger.new('../outputs/logs/edgarlib.log')
 
   class Main
-    def self.run
+    include Singleton
+
+    def run
       args = Edgarlib::CliTools::Args.new
-      if args.t
-        sec_gov = Edgarlib::SecGov::TickerCikJson.new
-      end
+      companies = Edgarlib::SecGov::TickerCik.new.get_companies_by_tickers(args.tickers)
+      print "STOP"
     end
   end
 end
 
 
 # ===== main =====
-Edgarlib::Main.run
+Edgarlib::Main.instance.run
