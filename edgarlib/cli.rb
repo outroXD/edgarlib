@@ -5,33 +5,32 @@ require 'optionparser'
 module Edgarlib
   module CliTools
     class Args
-      attr_accessor :t, :i, :tickers
+      attr_accessor :is_install, :tickers
 
       public
       def initialize
-        self.tickers = []
-        self.parse_args
-        LOGGER.info(self.to_s)
+        @tickers    ||= []
+        @is_install ||= false
+        parse_args
+        LOGGER.info(to_s)
       end
 
       def to_s
         log = ""
-        if self.t
-          log << "-T: #{self.t}"
+        if @is_install
+          log << "-I: #{@is_install} --install: #{@tickers}"
         end
-        if self.i
-          log << "-I: #{self.i} --install: #{self.tickers}"
-        end
-        log
+        log.to_s
       end
 
       private
       def parse_args
         option_parser = OptionParser.new
-        option_parser.on('-T') {|v| self.t = true}
         option_parser.on('-I', '--install <ticker>', 'tickerで指定したXBRLをローカルにダウンロードする。') do |v|
-          self.i = true
-          self.tickers.append(v.upcase)
+          @tickers.append(v.upcase)
+          if @tickers.length != 0
+            @is_install = true
+          end
         end
         option_parser.parse(ARGV)
       end
