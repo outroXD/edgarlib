@@ -25,7 +25,7 @@ module Edgarlib
 
     public
     def get_response_as_json(url)
-      response = self.get_response(url)
+      response = get_response(url)
 
       if response.nil?
         return nil
@@ -40,7 +40,7 @@ module Edgarlib
     end
 
     def get_response_as_xml(url)
-      response = self.get_response(url)
+      response = get_response(url)
 
       if response.nil?
         return nil
