@@ -4,6 +4,7 @@ require 'net/http'
 require 'uri'
 require 'json'
 require 'singleton'
+require 'nokogiri'
 require 'rexml/document'
 
 module Edgarlib
@@ -39,7 +40,7 @@ module Edgarlib
       json
     end
 
-    def get_response_as_xml(url)
+    def get_response_as_xml(url, parser="nokogiri")
       response = get_response(url)
 
       if response.nil?
@@ -47,7 +48,11 @@ module Edgarlib
       end
 
       begin
-        xml = REXML::Document.new(response.body)
+        if parser == "nokogiri"
+          xml = Nokogiri::XML(response.body)
+        else
+          xml = REXML::Document.new(response.body)
+        end
       rescue => e
         Edgarlib::LOGGER.error(e.message)
       end
