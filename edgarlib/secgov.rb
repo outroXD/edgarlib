@@ -71,7 +71,7 @@ module Edgarlib
       end
 
       public
-      def get_url
+      def to_s
         url = @@base_url
         url << "action=#{@action}"
         url << "&CIK=#{@cik}"
