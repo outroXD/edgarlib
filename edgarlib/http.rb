@@ -1,6 +1,7 @@
 # encoding: utf-8
 
 require 'net/http'
+require 'open-uri'
 require 'uri'
 require 'json'
 require 'singleton'
@@ -12,28 +13,30 @@ module Edgarlib
     include Singleton
 
     private
-    def get_response(url)
-      response = Net::HTTP.get_response(URI::parse(url))
-
-      case response
-      when Net::HTTPSuccess
-        return response
-      else
-        Edgarlib::LOGGER.error(response.code)
+    def get_response_body(url)
+      URI.open(url) do |response|
+        case response.status[1]  # get Http status code.
+        when "OK"
+          body = response.read
+          return body
+        else
+          Edgarlib::LOGGER.error(response.status[0])
+        end
       end
       nil
     end
 
     public
     def get_response_as_json(url)
-      response = get_response(url)
+      response_body = get_response_body(url)
 
-      if response.nil?
+      if response_body.nil?
+        # TODO その後の処理不可のため例外投げる
         return nil
       end
 
       begin
-        json = JSON.load(response.body)
+        json = JSON.load(response_body)
       rescue => e
         Edgarlib::LOGGER.error(e.message)
       end
@@ -41,17 +44,18 @@ module Edgarlib
     end
 
     def get_response_as_xml(url, parser="nokogiri")
-      response = get_response(url)
+      response_body = get_response_body(url)
 
-      if response.nil?
+      if response_body.nil?
+        # TODO その後の処理不可のため例外投げる
         return nil
       end
 
       begin
         if parser == "nokogiri"
-          xml = Nokogiri::XML(response.body)
+          xml = Nokogiri::HTML(response_body)
         else
-          xml = REXML::Document.new(response.body)
+          xml = REXML::Document.new(response_body)
         end
       rescue => e
         Edgarlib::LOGGER.error(e.message)
